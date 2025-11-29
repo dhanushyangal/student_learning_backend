@@ -13,6 +13,31 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    message: 'Student Learning Outcomes API Server',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      courses: '/api/courses',
+      assessments: '/api/assessments',
+      students: '/api/students',
+      reports: '/api/reports',
+      outcomes: '/api/outcomes'
+    }
+  });
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
+// Handle favicon requests (prevent 404s)
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+app.get('/favicon.png', (req, res) => res.status(204).end());
+
 // Routes
 app.use('/api/auth', authRouter);
 app.use('/api/courses', coursesRouter);
